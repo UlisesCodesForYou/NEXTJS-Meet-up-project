@@ -1,4 +1,4 @@
-
+import { useEffect, useState } from "react";
 import MeetupList from "../components/meetups/MeetupList";
 
 const DUMMY_MEETUPS = [
@@ -21,7 +21,29 @@ const DUMMY_MEETUPS = [
 ];
 
 const HomePage = (props) => {
-  return <MeetupList meetups={DUMMY_MEETUPS} />;
+  return <MeetupList meetups={props.meetups} />;
+};
+
+// export const getStaticProps = async (context) => {
+//   const req = context.req;
+//   const res = context.res;
+
+//   return {
+//     props: {
+//       meetups: DUMMY_MEETUPS,
+//     },
+//   };
+// };
+
+export const getStaticProps = async () => {
+  // This code will never reach the clients. It will only run during the build process.
+  // Fetch data from an API
+  return {
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
+    revalidate: 10
+  };
 };
 
 export default HomePage;
