@@ -11,19 +11,30 @@ const MeetupDetails = () => {
   );
 };
 
-export const getStaticProps = async (context) => {
+export const getStaticPaths = async () => {
+  return {
+    fallback: false,
+    paths: [
+      {
+        params: {
+          meetupId: "m1",
+        },
+      },
+    ],
+  };
+};
 
-  const meetupId = context.params.meetupId
+export const getStaticProps = async (context) => {
+  const meetupId = context.params.meetupId;
   return {
     props: {
       meetupData: {
         image:
           "https://upload.wikimedia.org/wikipedia/commons/d/d3/Stadtbild_M%C3%BCnchen.jpg",
-          id: meetupId,
-          title: 'First Meetup',
-          address: '23 fake street, city country 123445',
-          description="This is a nice city"
-
+        id: meetupId,
+        title: "First Meetup",
+        address: "23 fake street, city country 123445",
+        description: "This is a nice city",
       },
     },
   };
