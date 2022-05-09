@@ -20,6 +20,11 @@ export const getStaticPaths = async () => {
           meetupId: "m1",
         },
       },
+      {
+        params: {
+          meetupId: "m2",
+        },
+      },
     ],
   };
 };
