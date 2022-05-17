@@ -1,3 +1,4 @@
+import { MongoClient } from "mongodb";
 import MeetupDetail from "../../components/meetups/MeetupDetail";
 
 const MeetupDetails = () => {
@@ -12,6 +13,15 @@ const MeetupDetails = () => {
 };
 
 export const getStaticPaths = async () => {
+  const client = await MongoClient.connect(
+    "mongodb+srv://ulisesorozco6:3nkd513iNhKYH35y@cluster0.utzdw.mongodb.net/newmeetUp?retryWrites=true&w=majority"
+  );
+  const db = client.db(); // DB = database
+
+  const meetupsCollection = db.collection("meetUp");
+
+  const meetups = await meetupsCollection.find({},{})
+
   return {
     fallback: false,
     paths: [

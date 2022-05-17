@@ -1,24 +1,6 @@
 import { useEffect, useState } from "react";
+import { MongoClient } from "mongodb";
 import MeetupList from "../components/meetups/MeetupList";
-
-const DUMMY_MEETUPS = [
-  {
-    id: "m1",
-    tittle: "first meet up",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/d/d3/Stadtbild_M%C3%BCnchen.jpg",
-    address: "12355 some city",
-    description: "This is the first meet up",
-  },
-  {
-    id: "m2",
-    tittle: "first meet up",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/d/d3/Stadtbild_M%C3%BCnchen.jpg",
-    address: "4321 other city",
-    description: "This is the second meet up",
-  },
-];
 
 const HomePage = (props) => {
   return <MeetupList meetups={props.meetups} />;
@@ -37,12 +19,30 @@ const HomePage = (props) => {
 
 export const getStaticProps = async () => {
   // This code will never reach the clients. It will only run during the build process.
-  // Fetch data from an API
+
+  // ## START OF MONGODB CONNECTING CODE ######
+  const client = await MongoClient.connect(
+    "mongodb+srv://ulisesorozco6:3nkd513iNhKYH35y@cluster0.utzdw.mongodb.net/newmeetUp?retryWrites=true&w=majority"
+  );
+  const db = client.db(); // DB = database
+
+  const meetupsCollection = db.collection("meetUp");
+
+  // END OF CONNECTING CODE #######
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
   return {
     props: {
-      meetups: DUMMY_MEETUPS,
+      meetups: meetups.map((meetup) => ({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      })),
     },
-    revalidate: 10
+    revalidate: 10,
   };
 };
 
