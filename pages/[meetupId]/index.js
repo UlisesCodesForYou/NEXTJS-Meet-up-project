@@ -19,7 +19,7 @@ const MeetupDetails = (props) => {
   );
 };
 
-export const getStaticPaths = async (x) => {
+export const getStaticPaths = async () => {
   const client = await MongoClient.connect(
     "mongodb+srv://ulisesorozco6:3nkd513iNhKYH35y@cluster0.utzdw.mongodb.net/newmeetUp?retryWrites=true&w=majority"
   );
@@ -30,7 +30,7 @@ export const getStaticPaths = async (x) => {
   const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
 
   return {
-    fallback: false,
+    fallback: true,
     paths: meetups.map((meetup) => ({
       params: { meetupId: meetup._id.toString() },
     })),
